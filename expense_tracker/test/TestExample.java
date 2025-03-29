@@ -13,6 +13,8 @@ import org.junit.Test;
 import controller.ExpenseTrackerController;
 import model.ExpenseTrackerModel;
 import model.Transaction;
+import model.Filter.AmountFilter;
+import model.Filter.CategoryFilter;
 import view.ExpenseTrackerView;
 
 
@@ -113,4 +115,77 @@ public class TestExample {
         assertEquals(0.00, totalCost, 0.01);
     }
     
+
+        
+    @Test
+    public void testInvalidInputHandling() {
+	// This is new test case 2: For the Controller
+	//
+	// Check pre-conditions
+	assertEquals(0, model.getTransactions().size());
+	assertEquals(0.00, getTotalCost(), 0.01);
+	// Call the unit under test
+        boolean didAddTransaction = controller.addTransaction(0.00, "InvalidCategory");
+	// Check post-conditions (i.e. nothing changed)
+	assertFalse(didAddTransaction);
+        assertEquals(0, model.getTransactions().size());
+        assertEquals(0.00, getTotalCost(), 0.01);
+
+	// See above for the pre-conditions
+	//
+	// Call the unit under test
+	boolean didAddTransaction2 = controller.addTransaction(50.00, "");
+	// Check the post-conditions
+	assertFalse(didAddTransaction2);
+        assertEquals(0, model.getTransactions().size());
+        assertEquals(0.00, getTotalCost(), 0.01);
+    }
+    //filter by amount
+    @Test
+    public void testFilterByAmount() {
+	// This is new test case 3: For the Model
+	//
+	// Setup
+	double amountToFilterBy = 50.0;
+        controller.addTransaction(amountToFilterBy, "food");
+        controller.addTransaction(30.00, "entertainment");
+        controller.addTransaction(40.00, "food");
+
+	// Check pre-conditions
+	assertEquals(3, model.getTransactions().size());
+
+	// Call unit under test
+        controller.applyFilter(new AmountFilter(amountToFilterBy));
+
+	// Check the post-conditions
+        List<Transaction> displayedTransactions = view.getDisplayedTransactions();
+        assertEquals(1, displayedTransactions.size());
+        assertEquals(amountToFilterBy, displayedTransactions.get(0).getAmount(), 0.01);
+    } 
+
+
+    //filter by category
+    @Test
+    public void testFilterByCategory() {
+	// This is new test case 4: For the Model
+	//
+	// Setup
+	String categoryToFilterBy = "food";
+        controller.addTransaction(50.00, categoryToFilterBy);
+        controller.addTransaction(30.00, "entertainment");
+        controller.addTransaction(40.00, categoryToFilterBy);
+
+	// Check pre-conditions
+	assertEquals(3, model.getTransactions().size());
+
+	// Call the unit under test
+        controller.applyFilter(new CategoryFilter(categoryToFilterBy));
+
+	// Check the post-conditions
+        List<Transaction> displayedTransactions = view.getDisplayedTransactions();
+        assertEquals(2, displayedTransactions.size());
+	for (Transaction currDisplayedTransaction : displayedTransactions) {
+	    assertEquals(categoryToFilterBy, currDisplayedTransaction.getCategory());
+	}
+    }
 }
