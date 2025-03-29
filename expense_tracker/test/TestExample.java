@@ -2,6 +2,8 @@
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertNull;
 
 import java.util.Date;
 import java.util.List;
@@ -155,7 +157,8 @@ public class TestExample {
 	assertEquals(3, model.getTransactions().size());
 
 	// Call unit under test
-        controller.applyFilter(new AmountFilter(amountToFilterBy));
+        controller.setFilter(new AmountFilter(amountToFilterBy));
+        controller.applyFilter();
 
 	// Check the post-conditions
         List<Transaction> displayedTransactions = view.getDisplayedTransactions();
@@ -179,7 +182,8 @@ public class TestExample {
 	assertEquals(3, model.getTransactions().size());
 
 	// Call the unit under test
-        controller.applyFilter(new CategoryFilter(categoryToFilterBy));
+        controller.setFilter(new CategoryFilter(categoryToFilterBy));
+        controller.applyFilter();
 
 	// Check the post-conditions
         List<Transaction> displayedTransactions = view.getDisplayedTransactions();
