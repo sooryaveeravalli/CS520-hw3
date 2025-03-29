@@ -58,14 +58,15 @@ public class ExpenseTrackerController {
       // Use the Strategy class to perform the desired filtering
       List<Transaction> transactions = model.getTransactions();
       List<Transaction> filteredTransactions = filter.filter(transactions);
-      List<Integer> rowIndexes = new ArrayList<>();
-      for (Transaction t : filteredTransactions) {
-        int rowIndex = transactions.indexOf(t);
-        if (rowIndex != -1) {
-          rowIndexes.add(rowIndex);
-        }
-      }
-      view.highlightRows(rowIndexes);
+      view.displayFilteredTransactions(filteredTransactions);
+    //   List<Integer> rowIndexes = new ArrayList<>();
+    //   for (Transaction t : filteredTransactions) {
+    //     int rowIndex = transactions.indexOf(t);
+    //     if (rowIndex != -1) {
+    //       rowIndexes.add(rowIndex);
+    //     }
+    //   }
+    //   view.highlightRows(rowIndexes);
     }
     else{
       JOptionPane.showMessageDialog(view, "No filter applied");
