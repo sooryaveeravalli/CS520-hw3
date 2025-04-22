@@ -67,7 +67,13 @@ public class ExpenseTrackerApp {
     JOptionPane.showMessageDialog(view,exception.getMessage());
     view.toFront();
    }});
-    
 
+
+   // Add action listener to the "Clear Filter" button
+   view.addClearFilterListener(e -> {
+     controller.setFilter(null);
+     controller.applyFilter();
+   });
+    
   }
 }

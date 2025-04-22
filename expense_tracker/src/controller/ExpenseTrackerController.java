@@ -53,24 +53,18 @@ public class ExpenseTrackerController {
   }
 
   public void applyFilter() {
-    //null check for filter
-    if(filter!=null){
+    List<Transaction> filteredTransactions;
+    // If no filter is specified, show all transactions.
+    if (filter == null) {
+      filteredTransactions = model.getTransactions();
+    }
+    // If a filter is specified, show only the transactions accepted by that filter.
+    else {
       // Use the Strategy class to perform the desired filtering
       List<Transaction> transactions = model.getTransactions();
-      List<Transaction> filteredTransactions = filter.filter(transactions);
-      view.displayFilteredTransactions(filteredTransactions);
-    //   List<Integer> rowIndexes = new ArrayList<>();
-    //   for (Transaction t : filteredTransactions) {
-    //     int rowIndex = transactions.indexOf(t);
-    //     if (rowIndex != -1) {
-    //       rowIndexes.add(rowIndex);
-    //     }
-    //   }
-    //   view.highlightRows(rowIndexes);
+      filteredTransactions = filter.filter(transactions);
     }
-    else{
-      JOptionPane.showMessageDialog(view, "No filter applied");
-      view.toFront();}
-
+    view.displayFilteredTransactions(filteredTransactions);
   }
+    
 }

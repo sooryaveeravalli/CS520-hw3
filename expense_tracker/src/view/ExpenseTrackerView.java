@@ -23,6 +23,8 @@ public class ExpenseTrackerView extends JFrame {
   private JTextField amountFilterField;
   private JButton amountFilterBtn;
 
+  private JButton clearFilterBtn;
+    
   private List<Transaction> displayedTransactions = new ArrayList<>(); // ✅ Moved here
 
   public ExpenseTrackerView() {
@@ -51,6 +53,8 @@ public class ExpenseTrackerView extends JFrame {
     amountFilterField = new JTextField(10);
     amountFilterBtn = new JButton("Filter by Amount");
 
+    clearFilterBtn = new JButton("Clear Filter");
+    
     JPanel inputPanel = new JPanel();
     inputPanel.add(amountLabel);
     inputPanel.add(amountField);
@@ -61,7 +65,8 @@ public class ExpenseTrackerView extends JFrame {
     JPanel buttonPanel = new JPanel();
     buttonPanel.add(amountFilterBtn);
     buttonPanel.add(categoryFilterBtn);
-
+    buttonPanel.add(clearFilterBtn);
+    
     add(inputPanel, BorderLayout.NORTH);
     add(new JScrollPane(transactionsTable), BorderLayout.CENTER); 
     add(buttonPanel, BorderLayout.SOUTH);
@@ -119,6 +124,10 @@ public class ExpenseTrackerView extends JFrame {
     }
   }
 
+  public void addClearFilterListener(ActionListener listener) {
+    clearFilterBtn.addActionListener(listener);
+  }
+    
   public void refreshTable(List<Transaction> transactions) {
     model.setRowCount(0);
     this.displayedTransactions = transactions; // ✅ Track displayed transactions
