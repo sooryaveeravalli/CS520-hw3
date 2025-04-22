@@ -26,6 +26,9 @@ public class TestExample {
   private ExpenseTrackerView view;
   private ExpenseTrackerController controller;
 
+  public static final String CATEGORY_FOOD = "food";
+  public static final String CATEGORY_ENTERTAINMENT = "entertainment";  
+    
   @Before
   public void setup() {
     model = new ExpenseTrackerModel();
@@ -70,7 +73,7 @@ public class TestExample {
     
         // Perform the action: Add a transaction
 	double amount = 50.0;
-	String category = "food";
+	String category = CATEGORY_FOOD;
         assertTrue(controller.addTransaction(amount, category));
     
         // Post-condition: List of transactions contains only
@@ -93,7 +96,7 @@ public class TestExample {
     
         // Perform the action: Add and remove a transaction
 	double amount = 50.0;
-	String category = "food";
+	String category = CATEGORY_FOOD;
         Transaction addedTransaction = new Transaction(amount, category);
         model.addTransaction(addedTransaction);
     
@@ -142,19 +145,27 @@ public class TestExample {
         assertEquals(0, model.getTransactions().size());
         assertEquals(0.00, getTotalCost(), 0.01);
     }
+
     //filter by amount
     @Test
     public void testFilterByAmount() {
 	// This is new test case 3: For the Model
 	//
 	// Setup
-	double amountToFilterBy = 50.0;
-        controller.addTransaction(amountToFilterBy, "food");
-        controller.addTransaction(30.00, "entertainment");
-        controller.addTransaction(40.00, "food");
+	double[] amountsList = { 50.0, 30.0, 40.0 };
+	double amountToFilterBy = amountsList[0];
+	String[] categoriesList = { CATEGORY_FOOD, CATEGORY_ENTERTAINMENT, CATEGORY_FOOD };
+	for (int i = 0; i < amountsList.length; i++) {
+	    controller.addTransaction(amountsList[i], categoriesList[i]);
+	}
 
 	// Check pre-conditions
-	assertEquals(3, model.getTransactions().size());
+	List<Transaction> transactionsList = model.getTransactions();
+	assertEquals(3, transactionsList.size());
+	for (int j = 0; j < transactionsList.size(); j++) {
+	    Transaction currentTransaction = transactionsList.get(j);
+	    checkTransaction(amountsList[j], categoriesList[j], currentTransaction);
+	}
 
 	// Call unit under test
         controller.setFilter(new AmountFilter(amountToFilterBy));
@@ -172,15 +183,22 @@ public class TestExample {
     public void testFilterByCategory() {
 	// This is new test case 4: For the Model
 	//
-	// Setup
-	String categoryToFilterBy = "food";
-        controller.addTransaction(50.00, categoryToFilterBy);
-        controller.addTransaction(30.00, "entertainment");
-        controller.addTransaction(40.00, categoryToFilterBy);
+        // Setup
+	double[] amountsList = { 50.0, 30.0, 40.0 };
+        String[] categoriesList = { CATEGORY_FOOD, CATEGORY_ENTERTAINMENT, CATEGORY_FOOD };
+	String categoryToFilterBy = categoriesList[0];
+        for (int i = 0; i < amountsList.length; i++) {
+            controller.addTransaction(amountsList[i], categoriesList[i]);
+        }
 
-	// Check pre-conditions
-	assertEquals(3, model.getTransactions().size());
-
+        // Check pre-conditions 
+        List<Transaction> transactionsList = model.getTransactions();
+        assertEquals(3, transactionsList.size());
+        for (int j = 0; j < transactionsList.size(); j++) {
+            Transaction currentTransaction = transactionsList.get(j);
+            checkTransaction(amountsList[j], categoriesList[j], currentTransaction);
+        }
+	
 	// Call the unit under test
         controller.setFilter(new CategoryFilter(categoryToFilterBy));
         controller.applyFilter();
