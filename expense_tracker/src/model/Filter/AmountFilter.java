@@ -20,6 +20,10 @@ public class AmountFilter implements TransactionFilter{
     }
     @Override
     public List<Transaction> filter(List<Transaction> transactions){
+	// Perform input validation
+	if (transactions == null) {
+	    throw new IllegalArgumentException("The transactions list must be non-null.");
+	}
         List<Transaction> filteredTransactions = new ArrayList<>();
         for(Transaction transaction : transactions){
             // Your solution could use a different comparison here.

@@ -21,9 +21,12 @@ public class CategoryFilter implements TransactionFilter {
 
     @Override
     public List<Transaction> filter(List<Transaction> transactions) {
-
+	// Perform input validation
+        if (transactions == null) {
+            throw new IllegalArgumentException("The transactions list must be non-null.");
+	}
+	
         List<Transaction> filteredTransactions = new ArrayList<>();
-
         for (Transaction transaction : transactions) {
             if (transaction.getCategory().equalsIgnoreCase(categoryFilter)) {
                 filteredTransactions.add(transaction);
