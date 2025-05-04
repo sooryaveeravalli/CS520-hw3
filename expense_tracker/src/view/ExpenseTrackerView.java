@@ -13,6 +13,7 @@ public class ExpenseTrackerView extends JFrame {
 
   private JTable transactionsTable;
   private JButton addTransactionBtn;
+  private JButton removeTransactionBtn;
   private JFormattedTextField amountField;
   private JTextField categoryField;
   private DefaultTableModel model;
@@ -29,18 +30,21 @@ public class ExpenseTrackerView extends JFrame {
 
   public ExpenseTrackerView() {
     setTitle("Expense Tracker");
-    setSize(600, 400);
+    setSize(1200, 800);
 
     String[] columnNames = {"serial", "Amount", "Category", "Date"};
     this.model = new DefaultTableModel(columnNames, 0);
 
     transactionsTable = new JTable(model);
     addTransactionBtn = new JButton("Add Transaction");
+    removeTransactionBtn = new JButton("Remove Transaction");
+
 
     JLabel amountLabel = new JLabel("Amount:");
     NumberFormat format = NumberFormat.getNumberInstance();
     amountField = new JFormattedTextField(format);
     amountField.setColumns(10);
+    format.setGroupingUsed(false);
 
     JLabel categoryLabel = new JLabel("Category:");
     categoryField = new JTextField(10);
@@ -61,11 +65,18 @@ public class ExpenseTrackerView extends JFrame {
     inputPanel.add(categoryLabel); 
     inputPanel.add(categoryField);
     inputPanel.add(addTransactionBtn);
+    inputPanel.add(removeTransactionBtn);
 
     JPanel buttonPanel = new JPanel();
     buttonPanel.add(amountFilterBtn);
     buttonPanel.add(categoryFilterBtn);
     buttonPanel.add(clearFilterBtn);
+
+    // Enable/disable remove button based on selection
+    transactionsTable.getSelectionModel().addListSelectionListener(e -> {
+        removeTransactionBtn.setEnabled(transactionsTable.getSelectedRow() != -1);
+    });
+    removeTransactionBtn.setEnabled(false); // Initially disabled
     
     add(inputPanel, BorderLayout.NORTH);
     add(new JScrollPane(transactionsTable), BorderLayout.CENTER); 
@@ -149,6 +160,10 @@ public class ExpenseTrackerView extends JFrame {
 
   public JButton getAddTransactionBtn() {
     return addTransactionBtn;
+  }
+
+  public JButton getRemoveTransactionBtn() {
+    return removeTransactionBtn;
   }
 
   public void displayFilteredTransactions(List<Transaction> filteredTransactions) {
