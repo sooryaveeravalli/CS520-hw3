@@ -119,6 +119,25 @@ public class TestExample {
         double totalCost = getTotalCost();
         assertEquals(0.00, totalCost, 0.01);
     }
+
+    @Test
+    public void testRemoveNonExistingTransaction() {
+        // Pre-condition: List of transactions is empty
+        assertEquals(0, model.getTransactions().size());
+
+        // Setup: Add a transaction
+        double amount = 20.0;
+        String category = CATEGORY_FOOD;
+        boolean added = controller.addTransaction(amount, category);
+        assertTrue("Transaction should be added", added);
+
+        // Execution: Try to remove a transaction at invalid index (e.g., 5)
+        boolean removed = controller.removeTransaction(5);
+
+        // Verification: Should fail
+        assertFalse("Non-existing transaction should not be removed", removed);
+        assertEquals("Transaction list should still have one item", 1, model.getTransactions().size());
+    }
     
 
         
