@@ -52,7 +52,7 @@ public class ExpenseTrackerController {
     return true;
   }
 
-  public boolean removeTransaction(int rowIndex) {
+  public boolean undoTransaction(int rowIndex) {
     if (rowIndex < 0 || rowIndex >= model.getTransactions().size()) {
       return false;
     }

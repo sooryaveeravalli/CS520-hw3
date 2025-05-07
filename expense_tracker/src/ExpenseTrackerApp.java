@@ -39,12 +39,12 @@ public class ExpenseTrackerApp {
     });
 
     // Handle remove transaction button clicks
-    view.getRemoveTransactionBtn().addActionListener(e -> {
+    view.getUndoTransactionBtn().addActionListener(e -> {
       // Get selected row from view
       int selectedRow = view.getTransactionsTable().getSelectedRow();
       
       // Call controller to remove transaction
-      boolean removed = controller.removeTransaction(selectedRow);
+      boolean removed = controller.undoTransaction(selectedRow);
       
       if (!removed) {
         JOptionPane.showMessageDialog(view, "Invalid transaction selected for removal");

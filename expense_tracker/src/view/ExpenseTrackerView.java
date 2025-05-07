@@ -13,7 +13,7 @@ public class ExpenseTrackerView extends JFrame {
 
   private JTable transactionsTable;
   private JButton addTransactionBtn;
-  private JButton removeTransactionBtn;
+  private JButton undoTransactionBtn;
   private JFormattedTextField amountField;
   private JTextField categoryField;
   private DefaultTableModel model;
@@ -37,7 +37,7 @@ public class ExpenseTrackerView extends JFrame {
 
     transactionsTable = new JTable(model);
     addTransactionBtn = new JButton("Add Transaction");
-    removeTransactionBtn = new JButton("Remove Transaction");
+    undoTransactionBtn = new JButton("Undo Transaction");
 
 
     JLabel amountLabel = new JLabel("Amount:");
@@ -65,7 +65,7 @@ public class ExpenseTrackerView extends JFrame {
     inputPanel.add(categoryLabel); 
     inputPanel.add(categoryField);
     inputPanel.add(addTransactionBtn);
-    inputPanel.add(removeTransactionBtn);
+    inputPanel.add(undoTransactionBtn);
 
     JPanel buttonPanel = new JPanel();
     buttonPanel.add(amountFilterBtn);
@@ -74,9 +74,9 @@ public class ExpenseTrackerView extends JFrame {
 
     // Enable/disable remove button based on selection
     transactionsTable.getSelectionModel().addListSelectionListener(e -> {
-        removeTransactionBtn.setEnabled(transactionsTable.getSelectedRow() != -1);
+      undoTransactionBtn.setEnabled(transactionsTable.getSelectedRow() != -1);
     });
-    removeTransactionBtn.setEnabled(false); // Initially disabled
+    undoTransactionBtn.setEnabled(false); // Initially disabled
     
     add(inputPanel, BorderLayout.NORTH);
     add(new JScrollPane(transactionsTable), BorderLayout.CENTER); 
@@ -162,8 +162,8 @@ public class ExpenseTrackerView extends JFrame {
     return addTransactionBtn;
   }
 
-  public JButton getRemoveTransactionBtn() {
-    return removeTransactionBtn;
+  public JButton getUndoTransactionBtn() {
+    return undoTransactionBtn;
   }
 
   public void displayFilteredTransactions(List<Transaction> filteredTransactions) {

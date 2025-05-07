@@ -132,7 +132,7 @@ public class TestExample {
         assertTrue("Transaction should be added", added);
 
         // Execution: Try to remove a transaction at invalid index (e.g., 5)
-        boolean removed = controller.removeTransaction(5);
+        boolean removed = controller.undoTransaction(5);
 
         // Verification: Should fail
         assertFalse("Non-existing transaction should not be removed", removed);
